@@ -39,6 +39,25 @@ const getWorkout = async (req, res) => {
 const createWorkout = async (req, res) => {
     const { title, load, reps } = req.body
 
+    let emptyFields = []
+
+    // tells which fields are empty to send back to client 
+
+    if (!title) {
+        emptyFields.push('title')
+    }
+    if (!load) {
+        emptyFields.push('load')
+    }
+    if (!reps) {
+        emptyFields.push('reps')
+    }
+    if (emptyFields.length > 0) {
+
+        return res.status(400).json({ error: 'Please fill in all fields', emptyFields })
+    }
+
+
     // add doc to db
     try {
         // create is a async function so change the router.pos to be async , then use await
@@ -47,7 +66,8 @@ const createWorkout = async (req, res) => {
         res.status(200).json({ workout })
 
     } catch (error) {
-
+        // if mongoose tries to save doc to database, and does not match the schema, it wont work
+        // the security of this here since empty fields are not allowed 
         res.status(400).json({ error: error.message })
     }
     // res.json({ message: 'POST a new workout' })
