@@ -2,16 +2,15 @@ import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 
 const WorkoutDetails = ({ workout }) => {
     const { dispatch } = useWorkoutsContext()
+
     const handleClick = async () => {
-        const response = fetch('/api/workouts/' + workout._id, {
+        const response = await fetch('/api/workouts/' + workout._id, {
             method: 'DELETE'
         })
-
         const json = await response.json()
 
-        if (response.okay) {
+        if (response.ok) {
             dispatch({ type: 'DELETE_WORKOUT', payload: json })
-
         }
     }
 
@@ -21,7 +20,7 @@ const WorkoutDetails = ({ workout }) => {
             <p><strong>Load (kg): </strong>{workout.load}</p>
             <p><strong>Number of reps: </strong>{workout.reps}</p>
             <p>{workout.createdAt}</p>
-            <span onClick={handleClick}>Delete</span>
+            <span onClick={handleClick}>delete</span>
         </div>
     )
 }
